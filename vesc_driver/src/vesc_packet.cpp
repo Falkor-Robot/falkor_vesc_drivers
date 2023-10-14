@@ -555,6 +555,12 @@ VescPacketImu::VescPacketImu(std::shared_ptr<VescFrame> raw)
   if (mask_ & ((uint32_t)1 << 13)) {q1_ = getFloat32Auto(&ind);}
   if (mask_ & ((uint32_t)1 << 14)) {q2_ = getFloat32Auto(&ind);}
   if (mask_ & ((uint32_t)1 << 15)) {q3_ = getFloat32Auto(&ind);}
+
+  if(mask_ & ((uint32_t)1 << 16)) { controller_id_ = static_cast<uint32_t>(
+          (static_cast<uint16_t>(*(payload_.first + ind       )) << 8) +
+          static_cast<uint16_t>(*(payload_.first + ind + 1   ))
+        );
+  }
 }
 
 int VescPacketImu::mask() const
@@ -671,6 +677,12 @@ double VescPacketImu::q_z() const
 {
   return q3_;
 }
+
+int32_t VescPacketImu::controller_id() const
+{
+  return controller_id_;
+}
+
 
 REGISTER_PACKET_TYPE(COMM_GET_IMU_DATA, VescPacketImu)
 

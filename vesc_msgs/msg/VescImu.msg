@@ -6,3 +6,5 @@ geometry_msgs/Vector3  angular_velocity
 
 geometry_msgs/Vector3  compass
 geometry_msgs/Quaternion orientation
+
+int32 controller_id

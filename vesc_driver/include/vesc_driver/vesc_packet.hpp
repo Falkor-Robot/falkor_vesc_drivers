@@ -274,6 +274,8 @@ public:
   double q_x() const;
   double q_y() const;
   double q_z() const;
+  int32_t controller_id() const;
+
 
 private:
   double getFloat32Auto(uint32_t * pos) const;
@@ -299,6 +301,8 @@ private:
   double q1_;
   double q2_;
   double q3_;
+
+  int32_t controller_id_;
 };
 
 /*------------------------------------------------------------------------------------------------*/
