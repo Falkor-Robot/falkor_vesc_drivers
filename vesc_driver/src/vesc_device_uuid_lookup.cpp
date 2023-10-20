@@ -61,7 +61,7 @@ void VescDeviceLookup::vescPacketCallback(const std::shared_ptr<VescPacket const
 
     hwname_ = fw_version->hwname();
     version_ = fw_version->fwMajor() + "." + fw_version->fwMinor();
-    uuid_ += decode_uuid(uuid);
+    uuid_ = decode_uuid(uuid);
     ready_ = true;
   }
 }
@@ -91,6 +91,11 @@ const char * VescDeviceLookup::version() const
 const char * VescDeviceLookup::hwname() const
 {
   return hwname_.c_str();
+}
+
+const char *   VescDeviceLookup::get_error() const{
+
+  return error_.c_str();
 }
 
 }  // namespace vesc_driver

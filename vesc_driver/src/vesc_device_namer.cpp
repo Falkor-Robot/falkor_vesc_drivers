@@ -42,6 +42,7 @@ int main(int argc, char ** argv)
     setenv("VESC_UUID_ENV", lookup.deviceUUID(), true);
     return 0;
   } else {
+    std::cout << lookup.get_error() << std::endl;
     return -1;
   }
 }
