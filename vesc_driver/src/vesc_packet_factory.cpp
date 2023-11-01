@@ -35,6 +35,7 @@
 #include <iterator>
 #include <memory>
 #include <string>
+#include <iomanip>
 
 namespace vesc_driver
 {
@@ -102,7 +103,15 @@ VescPacketPtr VescPacketFactory::createPacket(
 
   // check length
   if (std::distance(view_payload.first, view_payload.second) > VescFrame::VESC_MAX_PAYLOAD_SIZE) {
-    return createFailed(num_bytes_needed, what, "Invalid payload length");
+    /*std::stringstream ss;
+    ss << "Invalid payload length (" ;
+    ss << std::setfill('0') << std::setw(2) << std::hex << *view_payload.first;
+    ss << ") len " << std::distance(view_payload.first, view_payload.second);
+    std::string error = ss.str();
+
+    return createFailed(num_bytes_needed, what, error);
+    */
+   return createFailed(num_bytes_needed, what, "Invalid payload length");
   }
 
   // get iterators to crc field, end-of-frame field, and a view of the whole frame

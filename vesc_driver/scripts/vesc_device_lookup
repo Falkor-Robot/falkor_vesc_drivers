@@ -1,4 +1,4 @@
-dme#!/bin/bash
+#!/bin/bash
 
 export LD_LIBRARY_PATH=/opt/ros/foxy/lib 
 

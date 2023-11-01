@@ -564,6 +564,7 @@ VescPacketImu::VescPacketImu(std::shared_ptr<VescFrame> raw)
           static_cast<uint16_t>(*(payload_.first + ind + 1   ))
         );
   }
+  
 }
 
 int VescPacketImu::mask() const
