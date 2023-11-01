@@ -175,6 +175,7 @@ VescInterface::VescInterface(
 VescInterface::~VescInterface()
 {
   disconnect();
+  impl_.reset();
 }
 
 void VescInterface::setPacketHandler(const PacketHandlerFunction & handler)
