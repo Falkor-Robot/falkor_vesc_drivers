@@ -83,6 +83,11 @@ void VescInterface::Impl::packet_creation_thread()
   static auto temp_buffer = Buffer(2048, 0);
   while (packet_thread_run_) {
     const auto bytes_read = serial_driver_->port()->receive(temp_buffer);
+    if(bytes_read == 0) {
+      // Only attempt to read every 5 ms
+      std::this_thread::sleep_for(std::chrono::milliseconds(5));
+      continue;
+    }
     buffer_.reserve(buffer_.size() + temp_buffer.size());
     buffer_.insert(buffer_.end(), temp_buffer.begin(), temp_buffer.begin() + bytes_read);
     int bytes_needed = VescFrame::VESC_MIN_FRAME_SIZE;
