@@ -80,7 +80,7 @@ private:
 
 void VescInterface::Impl::packet_creation_thread()
 {
-  static auto temp_buffer = Buffer(2048, 0);
+  static auto temp_buffer = Buffer(/*2048*/4092, 0);
   while (packet_thread_run_) {
     const auto bytes_read = serial_driver_->port()->receive(temp_buffer);
     if(bytes_read == 0) {
@@ -145,7 +145,7 @@ void VescInterface::Impl::packet_creation_thread()
       buffer_.erase(buffer_.begin(), iter);
     }
     // Only attempt to read every 5 ms
-    std::this_thread::sleep_for(std::chrono::milliseconds(5));
+    std::this_thread::sleep_for(std::chrono::microseconds(500));//milliseconds(5));
   }
 }
 
