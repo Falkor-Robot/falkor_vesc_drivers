@@ -145,7 +145,7 @@ void VescInterface::Impl::packet_creation_thread()
       buffer_.erase(buffer_.begin(), iter);
     }
     // Only attempt to read every 5 ms
-    std::this_thread::sleep_for(std::chrono::microseconds(500));//milliseconds(5));
+    std::this_thread::sleep_for(std::chrono::microseconds(1));//milliseconds(5));
   }
 }
 
