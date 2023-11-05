@@ -56,6 +56,24 @@ public:
    * Creates a VescInterface object. Opens the serial port interface to the VESC if @p port is not
    * empty, otherwise the serial port remains closed until connect() is called.
    *
+   * @param vesc_id controller_id used to fraward command over canbus
+   * @param port Address of the serial port, e.g. '/dev/ttyUSB0'.
+   * @param packet_handler Function this class calls when a VESC packet is received.
+   * @param error_handler Function this class calls when an error is detected, such as a bad
+   *                      checksum.
+   *
+   * @throw SerialException
+   */
+  VescInterface(
+    const int vesc_id,
+    const std::string & port = std::string(),
+    const PacketHandlerFunction & packet_handler = PacketHandlerFunction(),
+    const ErrorHandlerFunction & error_handler = ErrorHandlerFunction());
+
+  /**
+   * Creates a VescInterface object. Opens the serial port interface to the VESC if @p port is not
+   * empty, otherwise the serial port remains closed until connect() is called.
+   *
    * @param port Address of the serial port, e.g. '/dev/ttyUSB0'.
    * @param packet_handler Function this class calls when a VESC packet is received.
    * @param error_handler Function this class calls when an error is detected, such as a bad
@@ -125,10 +143,20 @@ public:
   void setPosition(double position);
   void setServo(double servo);
 
+  void requestImuData(int vesc_id);
+
+  void setDutyCycle(int vesc_id, double duty_cycle);
+  void setCurrent(int vesc_id, double current);
+  void setBrake(int vesc_id, double brake);
+  void setSpeed(int vesc_id, double speed);
+  void setPosition(int vesc_id, double position);
+  void setServo(int vesc_id, double servo);
+
 private:
   // Pimpl - hide serial port members from class users
   class Impl;
   std::unique_ptr<Impl> impl_;
+  const int master_vesc_id_;
 };
 
 // todo: review

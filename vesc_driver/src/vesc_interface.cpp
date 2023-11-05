@@ -163,6 +163,23 @@ VescInterface::VescInterface(
   const PacketHandlerFunction & packet_handler,
   const ErrorHandlerFunction & error_handler)
 : impl_(new Impl())
+  , master_vesc_id_(0)
+{
+  setPacketHandler(packet_handler);
+  setErrorHandler(error_handler);
+  // attempt to conect if the port is specified
+  if (!port.empty()) {
+    connect(port);
+  }
+}
+
+VescInterface::VescInterface(
+  const int vesc_id,
+  const std::string & port,
+  const PacketHandlerFunction & packet_handler,
+  const ErrorHandlerFunction & error_handler)
+: impl_(new Impl())
+  , master_vesc_id_(vesc_id)
 {
   setPacketHandler(packet_handler);
   setErrorHandler(error_handler);
@@ -253,37 +270,100 @@ void VescInterface::requestState()
 
 void VescInterface::setDutyCycle(double duty_cycle)
 {
-  send(VescPacketSetDuty(duty_cycle));
+  setDutyCycle(master_vesc_id_, duty_cycle);
 }
 
 void VescInterface::setCurrent(double current)
 {
-  send(VescPacketSetCurrent(current));
+  setCurrent(master_vesc_id_, current);
 }
 
 void VescInterface::setBrake(double brake)
 {
-  send(VescPacketSetCurrentBrake(brake));
+  setBrake(master_vesc_id_, brake);
 }
 
 void VescInterface::setSpeed(double speed)
 {
-  send(VescPacketSetRPM(speed));
+  setSpeed(master_vesc_id_, speed);
 }
 
 void VescInterface::setPosition(double position)
 {
-  send(VescPacketSetPos(position));
+  setPosition(master_vesc_id_, position);
 }
 
 void VescInterface::setServo(double servo)
 {
-  send(VescPacketSetServoPos(servo));
+  setServo(master_vesc_id_, servo);
 }
 
 void VescInterface::requestImuData()
 {
-  send(VescPacketRequestImu());
+  requestImuData(master_vesc_id_);
+}
+
+void VescInterface::setDutyCycle(int vesc_id, double duty_cycle)
+{
+  if (master_vesc_id_ == vesc_id || vesc_id == 0) {
+    send(VescPacketSetDuty(duty_cycle));
+  } else {
+    send(VescPacketCanForwardRequest(vesc_id, VescPacketRequestFWVersion()));
+  }
+}
+
+void VescInterface::setCurrent(int vesc_id, double current)
+{
+  if (master_vesc_id_ == vesc_id || vesc_id == 0) {
+    send(VescPacketSetCurrent(current));
+  } else {
+    send(VescPacketCanForwardRequest(vesc_id, VescPacketSetCurrent(current)));
+  }
+}
+
+void VescInterface::setBrake(int vesc_id, double brake)
+{
+  if (master_vesc_id_ == vesc_id || vesc_id == 0) {
+    send(VescPacketSetCurrentBrake(brake));
+  } else {
+    send(VescPacketCanForwardRequest(vesc_id, VescPacketSetCurrentBrake(brake)));
+  }
+}
+
+void VescInterface::setSpeed(int vesc_id, double speed)
+{
+  if (master_vesc_id_ == vesc_id || vesc_id == 0) {
+    send(VescPacketSetRPM(speed));
+  } else {
+    send(VescPacketCanForwardRequest(vesc_id, VescPacketSetRPM(speed)));
+  }
+}
+
+void VescInterface::setPosition(int vesc_id, double position)
+{
+  if (master_vesc_id_ == vesc_id || vesc_id == 0) {
+    send(VescPacketSetPos(position));
+  } else {
+    send(VescPacketCanForwardRequest(vesc_id, VescPacketSetPos(position)));
+  }
+}
+
+void VescInterface::setServo(int vesc_id, double servo)
+{
+  if (master_vesc_id_ == vesc_id || vesc_id == 0) {
+    send(VescPacketSetServoPos(servo));
+  } else {
+    send(VescPacketCanForwardRequest(vesc_id, VescPacketSetServoPos(servo)));
+  }
+}
+
+void VescInterface::requestImuData(int vesc_id)
+{
+  if (master_vesc_id_ == vesc_id || vesc_id == 0) {
+    send(VescPacketRequestImu());
+  } else {
+    send(VescPacketCanForwardRequest(vesc_id, VescPacketRequestImu()));
+  }
 }
 
 }  // namespace vesc_driver
