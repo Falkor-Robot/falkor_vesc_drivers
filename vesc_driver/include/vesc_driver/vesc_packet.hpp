@@ -276,7 +276,6 @@ public:
   double q_z() const;
   int32_t controller_id() const;
 
-
 private:
   double getFloat32Auto(uint32_t * pos) const;
 

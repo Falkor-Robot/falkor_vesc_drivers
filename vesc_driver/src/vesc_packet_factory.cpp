@@ -111,7 +111,7 @@ VescPacketPtr VescPacketFactory::createPacket(
 
     return createFailed(num_bytes_needed, what, error);
     */
-   return createFailed(num_bytes_needed, what, "Invalid payload length");
+    return createFailed(num_bytes_needed, what, "Invalid payload length");
   }
 
   // get iterators to crc field, end-of-frame field, and a view of the whole frame

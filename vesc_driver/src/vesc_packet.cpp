@@ -557,14 +557,13 @@ VescPacketImu::VescPacketImu(std::shared_ptr<VescFrame> raw)
   if (mask_ & ((uint32_t)1 << 15)) {q3_ = getFloat32Auto(&ind);}
 
   //  https://github.com/vedderb/bldc/issues/663
-  if(std::distance(payload_.first, payload_.second) > ind+1 ){
-  //if(mask_ & ((uint32_t)1 << 16)) { 
+  // if(mask_ & ((uint32_t)1 << 16)) {
+  if (std::distance(payload_.first, payload_.second) > ind + 1) {
     controller_id_ = static_cast<uint32_t>(
-          (static_cast<uint16_t>(*(payload_.first + ind        )) << 8) +
-          static_cast<uint16_t>(*(payload_.first + ind + 1   ))
-        );
+      (static_cast<uint16_t>(*(payload_.first + ind)) << 8) +
+      static_cast<uint16_t>(*(payload_.first + ind + 1))
+    );
   }
-  
 }
 
 int VescPacketImu::mask() const

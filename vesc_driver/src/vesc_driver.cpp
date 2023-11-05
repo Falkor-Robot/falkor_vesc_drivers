@@ -232,7 +232,7 @@ void VescDriver::vescPacketCallback(const std::shared_ptr<VescPacket const> & pa
     imu_msg.imu.orientation.z = imuData->q_z();
 
     imu_msg.imu.controller_id = imuData->controller_id();
-    
+
     std_imu_msg.linear_acceleration.x = imuData->acc_x();
     std_imu_msg.linear_acceleration.y = imuData->acc_y();
     std_imu_msg.linear_acceleration.z = imuData->acc_z();
@@ -245,9 +245,6 @@ void VescDriver::vescPacketCallback(const std::shared_ptr<VescPacket const> & pa
     std_imu_msg.orientation.x = imuData->q_x();
     std_imu_msg.orientation.y = imuData->q_y();
     std_imu_msg.orientation.z = imuData->q_z();
-
-
-
 
     imu_pub_->publish(imu_msg);
     imu_std_pub_->publish(std_imu_msg);

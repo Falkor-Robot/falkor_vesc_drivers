@@ -36,7 +36,7 @@ public:
   const char * deviceUUID() const;
   const char * version() const;
   const char * hwname() const;
-  const char *   get_error() const;
+  const char * get_error() const;
   void close();
   bool isReady();
 

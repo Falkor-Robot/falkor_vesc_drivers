@@ -93,8 +93,8 @@ const char * VescDeviceLookup::hwname() const
   return hwname_.c_str();
 }
 
-const char *   VescDeviceLookup::get_error() const{
-
+const char * VescDeviceLookup::get_error() const
+{
   return error_.c_str();
 }
 
