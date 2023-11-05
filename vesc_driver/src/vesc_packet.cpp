@@ -686,4 +686,45 @@ VescPacketRequestImu::VescPacketRequestImu()
   *(frame_->end() - 2) = static_cast<uint8_t>(crc & 0xFF);
 }
 /*------------------------------------------------------------------------------------------------*/
+VescPacketCanForward::VescPacketCanForward(std::shared_ptr<VescFrame> raw)
+: VescPacket("CanForward", raw)
+{
+}
+
+uint8_t VescPacketCanForward::vesc_id() const
+{
+  return *(payload_.first + 1);
+}
+VescPacketConstPtr VescPacketCanForward::packet() const
+{
+  int bytes_needed = VescFrame::VESC_MIN_FRAME_SIZE;
+  std::string error;
+  return VescPacketFactory::createPacket(frame().begin() + 2, frame().end(), &bytes_needed, &error);
+}
+
+REGISTER_PACKET_TYPE(COMM_FORWARD_CAN, VescPacketCanForward)
+
+VescPacketCanForwardRequest::VescPacketCanForwardRequest(uint8_t vesc_id, const VescPacket & packet)
+: VescPacket("CanForwardRequest", std::distance(packet.frame().begin(),
+    packet.frame().end()) - 5 + 2, COMM_FORWARD_CAN)
+{
+  *(payload_.first + 1) = vesc_id;
+
+  /* take payload and copy to forward */
+  vesc_driver::Buffer a = packet.frame();
+  std::copy(a.begin() + 2, a.end() - 3, payload_.first + 2);
+  /* calculate new crc */
+  uint16_t crc = CRC::Calculate(
+    &(*payload_.first), std::distance(payload_.first, payload_.second), VescFrame::CRC_TYPE);
+  *(frame_->end() - 3) = static_cast<uint8_t>(crc >> 8);
+  *(frame_->end() - 2) = static_cast<uint8_t>(crc & 0xFF);
+}
+
+VescPacketCANFrameForward::VescPacketCANFrameForward(std::shared_ptr<VescFrame> raw)
+: VescPacket("CanFrameForward", raw)
+{
+}
+
+REGISTER_PACKET_TYPE(COMM_CAN_FWD_FRAME, VescPacketCANFrameForward)
+/*------------------------------------------------------------------------------------------------*/
 }  // namespace vesc_driver

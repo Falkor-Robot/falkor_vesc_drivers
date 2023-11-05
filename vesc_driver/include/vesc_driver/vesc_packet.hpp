@@ -302,6 +302,27 @@ private:
 };
 
 /*------------------------------------------------------------------------------------------------*/
+class VescPacketCanForward : public VescPacket
+{
+public:
+  explicit VescPacketCanForward(std::shared_ptr<VescFrame> raw);
+
+  uint8_t vesc_id() const;
+  VescPacketConstPtr packet() const;
+};
+
+class VescPacketCanForwardRequest : public VescPacket
+{
+public:
+  VescPacketCanForwardRequest(uint8_t vesc_id, const VescPacket & packet);
+};
+
+/*------------------------------------------------------------------------------------------------*/
+class VescPacketCANFrameForward : public VescPacket
+{
+public:
+  explicit VescPacketCANFrameForward(std::shared_ptr<VescFrame> raw);
+};
 }  // namespace vesc_driver
 
 #endif  // VESC_DRIVER__VESC_PACKET_HPP_
